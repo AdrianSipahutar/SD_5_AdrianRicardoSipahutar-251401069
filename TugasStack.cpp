@@ -1,0 +1,190 @@
+#include <iostream>
+using namespace std;
+
+struct node {
+    int value;
+    node* next;
+};
+
+node* head = NULL;
+node* tail = NULL;
+// fungsi insert linked-list
+//1. Insert Fisrt
+void insertFirst(int n){
+    node *newnode = new node;
+    newnode -> value = n;
+    newnode -> next = NULL;
+
+    if (head == NULL){
+        head = newnode;
+        tail = newnode;
+    }
+    else {
+        newnode -> next = head;
+        head = newnode;
+    }
+}
+//2. Insert Last
+void insertLast(int n){
+    node *newnode = new node;
+    newnode -> value = n;
+    newnode -> next = NULL;
+
+    if (head == NULL){
+        head = newnode;
+        tail = head;
+    }
+    else {
+        tail -> next = newnode;
+        tail = newnode;
+    }
+
+}
+//3. Insert After
+void insertAfter(int n, int check){
+    if(head == NULL){
+     cout << "list kosong!" << endl;
+     return;
+    }
+
+    node *newnode = new node;
+    newnode -> value = n;
+    newnode -> next = NULL;
+
+    node *p = head;
+    while (p != NULL && p -> value != check){
+        p = p -> next;
+    }
+
+    if (p == NULL){
+        cout << "Node dengan nilai " << check << "tidak ditemukan !" << endl ;
+        delete newnode;
+    }
+    else {
+        newnode -> next = p -> next;
+        p -> next = newnode;
+        if (p == tail){
+            tail = newnode;
+        }
+    }
+}
+
+//fungsi delete pada linked list
+//1. delete fisrt
+void deletefirst(){
+    if (head == NULL){
+        cout << "List Kosong !" << endl;
+        return;
+    }
+
+    node *temp = head;
+    head = head -> next;
+    if (head == NULL) tail = NULL;
+    delete temp;
+}
+
+//2. delete last
+void deletelast(){
+    if (head == NULL){
+        cout << "List Kosong !" << endl;
+        return;
+    }
+
+    if (head == tail){
+        delete head;
+        head = tail = NULL;
+        return;
+    }
+
+    node *p = head;
+    while (p -> next != tail){
+        p = p -> next;
+    }
+
+    delete tail;
+    tail = p;
+    tail -> next = NULL;
+}
+//3. delete middle
+void deletemiddle(int check){
+    if (head == NULL){
+        cout << "List Kosong !" << endl;
+        return;
+    }
+
+    if (head -> value == check){
+        deletefirst();
+        return;
+    }
+
+    node *p = head;
+    while (p -> next != NULL && p -> value != check){
+        p = p -> next;
+    }
+
+    if (p -> next == NULL){
+        cout << " node dengan nilai " << check << "tidak ditemukan"<< endl;
+    }
+    else {
+        node  *temp = p -> next;
+        p -> next = temp -> next;
+        if (temp == tail) tail = p;
+        delete temp;
+    }
+}
+void display(){
+    node *temp  = head;
+    cout << "List Linked List: \n ";
+    while (temp != NULL){
+        cout << temp -> value << "-> ";
+        temp = temp -> next;
+        
+    }
+}
+int main(){
+    system ("cls");
+int pilihan, nilai;
+
+    do {
+        cout << "\n===============================\n";
+        cout << "      IMPLEMENTASI STACK       \n";
+        cout << "1. Push (Tambah Data)\n";
+        cout << "2. Pop (Hapus Data Teratas)\n";
+        cout << "3. Tampilkan Stack\n";
+        cout << "4. Keluar\n";
+        cout << "Pilihan Anda: ";
+        cin >> pilihan;
+
+        switch (pilihan) {
+            case 1:
+                cout << "Masukkan nilai yang ingin di-push: ";
+                cin >> nilai;
+                insertFirst(nilai); 
+                cout << "Data " << nilai << " berhasil ditambahkan ke stack.\n";
+                break;
+
+            case 2:
+                if (head == NULL) {
+                    cout << "Stack Kosong! Apa yang mau di pop coba :(.\n";
+                } else {
+                    cout << "Data teratas (" << head->value << ") berhasil di-pop.\n";
+                    deletefirst(); 
+                }
+                break;
+
+            case 3:
+                cout << "\n";
+                display();
+                cout << "NULL\n";
+                break;
+
+            case 4:
+                cout << "Keluar dari program.\n";
+                break;
+
+            default:
+                cout << "Pilihan tidak valid! Silakan coba lagi.\n";
+        }
+    } while (pilihan != 4);
+    
+}
